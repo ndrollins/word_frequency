@@ -53,7 +53,7 @@ defmodule Words do
   def occur(num \\ 5, words \\ @words) do
     words
     |> String.downcase()
-    |> String.split([" ", "\n", ",", ";", ".", "!", ":", "(", ")"], trim: true)
+    |> String.split(["*", "{", "}", "?", " ", "\n", ",", ";", ".", "!", ":", "(", ")"], trim: true)
     |> Enum.reduce(%{}, fn word, acc ->
       try do
         _word =

@@ -3,6 +3,8 @@ defmodule WordsTest do
   doctest Words
 
   test "greets the world" do
-    assert Words.hello() == :world
+    assert Words.occur(89) == %{}
+    assert Words.occur(1, "hello, hello?{})*") == %{"hello" => 2}
+    assert Words.occur(3, "hello, hello?{})*") == %{}
   end
 end
