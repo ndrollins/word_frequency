@@ -73,12 +73,14 @@ defmodule Words do
   end
 
   def sort(all_words, num) do
-    Enum.reduce(all_words, %{}, fn {key, value}, acc ->
-      if value >= num do
-        Map.put(acc, key, value)
-      else
-        acc
-      end
-    end)
+    full_list_of_words =
+      Enum.reduce(all_words, %{}, fn {key, value}, acc ->
+        if value >= num do
+          Map.put(acc, key, value)
+        else
+          acc
+        end
+      end)
+    Map.put(full_list_of_words, :total, Enum.count(full_list_of_words))
   end
 end
