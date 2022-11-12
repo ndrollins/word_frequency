@@ -69,18 +69,73 @@ defmodule Words do
           end
       end
     end)
-    |> sort(num)
+    |> frequency(num)
   end
 
-  def sort(all_words, num) do
+  def frequency(all_words, num) do
     full_list_of_words =
-      Enum.reduce(all_words, %{}, fn {key, value}, acc ->
-        if value >= num do
-          Map.put(acc, key, value)
+      Enum.reduce(all_words, %{}, fn {word, frequency}, acc ->
+        if frequency >= num do
+          Map.put(acc, word, frequency)
         else
           acc
         end
       end)
     Map.put(full_list_of_words, :total, Enum.count(full_list_of_words))
+  end
+
+  def sort_words_by_letter(frequency_list) do
+    frequency_list
+      |> Enum.sort
+  end
+
+  def sort_words_by_frequency(frequency_list) do
+    frequency_list
+    |> Enum.sort_by(fn {word, frequency} -> frequency end)
+  end
+
+  def most_frequently_used_word(frequency_list) do
+    frequency_list
+    |> Enum.max_by(fn {_word, frequency} -> frequency end)
+  end
+
+  def search_for_word(frequency_list, word) do
+    word = String.downcase(word)
+
+    case frequency_list |> Map.has_key?(word) do
+      false -> {:error, "Key not found"}
+      true -> {word, frequency_list[word]}
+    end
+  end
+
+  def top_used_words(frequency_list, number_of_times \\ 10) do
+
+    frequency_list
+    |> sort_words_by_frequency()
+    |> Enum.reverse
+    |> Enum.reduce([], fn word, acc ->
+      case word do
+        {:total, _number} -> acc
+        _else ->
+          if Enum.count(acc) == number_of_times do
+            acc
+          else
+            [word | acc]
+          end
+      end
+    end)
+  end
+
+  def all_words_used_this_amount(frequency_list, number_of_times) do
+    total_words =
+      frequency_list
+      |> Enum.reduce(%{}, fn {word, frequency}, acc ->
+        case frequency == number_of_times do
+          false -> acc
+          true -> Map.put(acc, word, frequency)
+        end
+      end)
+    Map.put(total_words, :total, Enum.count(total_words))
+    |> Enum.sort()
   end
 end
