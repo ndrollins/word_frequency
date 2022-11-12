@@ -50,6 +50,11 @@ defmodule Words do
   20 And when the Jews heard these things they were angry with him; yea, even as with the prophets of old, whom they had cast out, and stoned, and slain; and they also sought his life, that they might take it away. But behold, I, Nephi, will show unto you that the tender mercies of the Lord are over all those whom he hath chosen, because of their faith, to make them mighty even unto the power of deliverance.
   """
 
+  def file_reader(file \\ "Book-of-Mormon.txt") do
+    {:ok, words} = File.read(file)
+    words
+  end
+
   def occur(num \\ 5, words \\ @words) do
     words
     |> String.downcase()
@@ -107,6 +112,8 @@ defmodule Words do
       true -> {word, frequency_list[word]}
     end
   end
+
+  #def search_for_words do 
 
   def top_used_words(frequency_list, number_of_times \\ 10) do
 
