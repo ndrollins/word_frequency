@@ -58,7 +58,29 @@ defmodule Words do
   def occur(num \\ 5, words \\ @words) do
     words
     |> String.downcase()
-    |> String.split(["*", "{", "}", "?", " ", "\n", ",", ";", ".", "!", ":", "(", ")"], trim: true)
+    |> String.split(["《", "》", "…", "。", "·", "，", "」", "「", "*", "{", "}", "?", " ", "\n", ",", ";", ".", "!", ":", "(", ")", "'"], trim: true)
+    |> Enum.reduce(%{}, fn word, acc ->
+      try do
+        _word =
+          word
+          |> String.to_integer()
+
+        acc
+      rescue
+        _e ->
+          case Map.has_key?(acc, word) do
+            false -> Map.put(acc, word, 1)
+            true -> %{acc | word => acc[word] + 1}
+          end
+      end
+    end)
+    |> frequency(num)
+  end
+
+  def occur2(num \\ 5, words \\ @words) do
+    words
+    |> String.downcase()
+    |> String.split("", trim: true)
     |> Enum.reduce(%{}, fn word, acc ->
       try do
         _word =
