@@ -68,16 +68,13 @@ defmodule Words do
         acc
       rescue
         _e ->
-          case Map.has_key?(acc, word) do
-            false -> Map.put(acc, word, 1)
-            true -> %{acc | word => acc[word] + 1}
-          end
+          Map.update(acc, word, 1, fn times -> times + 1 end)
       end
     end)
     |> frequency(num)
   end
 
-  def occur2(num \\ 5, words \\ @words) do
+  def occur_chinese(num \\ 5, words \\ @words) do
     words
     |> String.downcase()
     |> String.split("", trim: true)
@@ -90,10 +87,7 @@ defmodule Words do
         acc
       rescue
         _e ->
-          case Map.has_key?(acc, word) do
-            false -> Map.put(acc, word, 1)
-            true -> %{acc | word => acc[word] + 1}
-          end
+          Map.update(acc, word, 1, fn times -> times + 1 end)
       end
     end)
     |> frequency(num)
